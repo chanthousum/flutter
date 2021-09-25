@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,7 +19,6 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +36,7 @@ class _LoginState extends State<Login> {
     return SingleChildScrollView(
         child: Center(
       child: Container(
+        color: Colors.white,
         padding: EdgeInsets.all(10.0),
         child: Form(
             key: _formKey,
@@ -99,7 +100,7 @@ class _LoginState extends State<Login> {
                         username: usernameController.text,
                         password: passwordController.text);
                     final body = json.encode(objUser.toJson());
-                    var t = await logIn(context,body);
+                    var t = await logIn(context, body);
                     setState(() {});
                   }
                 },
@@ -110,6 +111,21 @@ class _LoginState extends State<Login> {
               Text(
                 "forget password",
                 style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+                height: 50.0,
+              ),
+              Container(
+                color:Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      "assets/setec.png",
+                      width: 300,
+                    )
+                  ],
+                ),
               )
             ])),
       ),

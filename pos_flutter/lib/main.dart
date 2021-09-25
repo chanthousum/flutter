@@ -39,8 +39,17 @@ class MyApp extends StatelessWidget {
         backgroundColor:Colors.red,
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){}, icon:Icon(Icons.search_rounded,color:Colors.white,)),
-          IconButton(onPressed: (){}, icon:Icon(Icons.shopping_cart))
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search_rounded,
+                color: Colors.white,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/cart");
+              },
+              icon: Icon(Icons.shopping_cart))
         ],
 
       ),

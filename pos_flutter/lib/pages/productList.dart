@@ -10,12 +10,13 @@ import 'package:pos_flutter/models/product.dart';
 import 'package:pos_flutter/pages/categoryEditForm.dart';
 import 'dart:convert';
 import 'package:pos_flutter/pages/categoryForm.dart';
+import 'package:pos_flutter/pages/productDetail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List<Product>> getProductAll(BuildContext context) async {
   try {
     Categorys.checkRefreshToken(context);
-    var access =await FlutterSession().get("accessToken");
+    var access = await FlutterSession().get("accessToken");
     var endpoint = Uri.parse("${Categorys.serverIp}/api/v1/product/");
     var response = await http.get(endpoint, headers: {
       'Content-Type': 'application/json',
@@ -52,31 +53,33 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Product List'),
-          backgroundColor: Colors.red,
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search_rounded,
-                  color: Colors.white,
-                )),
-            IconButton(onPressed: () {
-              Navigator.pushNamed(context, "/cart");
-            }, icon: Icon(Icons.shopping_cart))
-          ],
-        ),
-        drawer: MyDrawer(context),
-        body: _myCategoryList(context),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => CategoryForm()));
-          },
-          child: Icon(Icons.add),
-        ),
+      appBar: AppBar(
+        title: Text('Product List'),
+        backgroundColor: Colors.red,
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search_rounded,
+                color: Colors.white,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/cart");
+              },
+              icon: Icon(Icons.shopping_cart))
+        ],
+      ),
+      drawer: MyDrawer(context),
+      body: _myCategoryList(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CategoryForm()));
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 
@@ -94,28 +97,22 @@ class _ProductListState extends State<ProductList> {
                         itemCount: data!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
-                              height: 100,
+                              height: 150,
                               child: Card(
                                   elevation: 5,
                                   child: ListTile(
-                                    trailing: FlatButton(
-                                        onPressed: () {
-                                          Categorys.deleteById(context,
-                                              "/api/v1/category/", data[index].id);
-                                        },
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        )),
-                                    leading: Image.asset("assets/2.png"),
-                                    title: Text(data[index].name.toString()),
-                                    onTap: () async {
-                                          await FlutterSession().set("name",data[index].name);
-                                          await FlutterSession().set("price",data[index].unitPrice);
-                                          await FlutterSession().set("qty",1);
-                                         print("dd${ await FlutterSession().get("name")}");
-                                    }
-                                  )));
+                                      leading: Image.asset("assets/2.png"),
+                                      title: Text(
+                                        "${data[index].name.toString() + "\n" + data[index].unitPrice.toString()}",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      onTap: () async {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return ProductDetail(data[index]);
+                                        }));
+                                      })));
                         }));
               } else if (snapshot.hasError) {
                 return Text("not Record");
