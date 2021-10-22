@@ -70,7 +70,8 @@ class ProductDetail extends StatelessWidget {
                             child: FlatButton(
                           onPressed: () {
                             Cart cart = new Cart();
-                            cart.addCart(product.id,product.name, product.unitPrice);
+                            cart.addCart(
+                                product.id, product.name, product.unitPrice);
                           },
                           child: Text(
                             "Add Qty",

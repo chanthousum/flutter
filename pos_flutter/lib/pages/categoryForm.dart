@@ -90,8 +90,8 @@ class _CategoryFormState extends State<CategoryForm> {
             color: Colors.green,
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                Categorys category =
-                    Categorys(id: 1, name: categoryController.text);
+                Categorys category = new Categorys();
+                category.name=categoryController.text;
                 var body = json.encode(category.toJson());
                 var category1 = await Categorys.Post(context,"/api/v1/category/", body);
               }

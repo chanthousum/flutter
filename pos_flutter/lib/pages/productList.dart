@@ -7,16 +7,16 @@ import 'package:pos_flutter/models/category.dart';
 import 'package:pos_flutter/models/model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pos_flutter/models/product.dart';
+import 'package:pos_flutter/models/user.dart';
 import 'package:pos_flutter/pages/categoryEditForm.dart';
 import 'dart:convert';
 import 'package:pos_flutter/pages/categoryForm.dart';
 import 'package:pos_flutter/pages/productDetail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 Future<List<Product>> getProductAll(BuildContext context) async {
   try {
     Categorys.checkRefreshToken(context);
-    var access = await FlutterSession().get("accessToken");
+    var access=await FlutterSession().get("accessToken");
     var endpoint = Uri.parse("${Categorys.serverIp}/api/v1/product/");
     var response = await http.get(endpoint, headers: {
       'Content-Type': 'application/json',

@@ -88,8 +88,8 @@ class _CategoryEditFormState extends State<CategoryEditForm> {
             color: Colors.green,
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                Categorys category =
-                    Categorys(name: categoryController.text);
+                Categorys category =new Categorys();
+                category.name=categoryController.text;
                 var body = json.encode(category.toJson());
                 final c=await Categorys.updateById(context,"/api/v1/category/",body,widget.c.id);
               }

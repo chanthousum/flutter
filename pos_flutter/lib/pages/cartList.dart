@@ -1,40 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session/flutter_session.dart';
-import 'package:pos_flutter/login.dart';
 import 'package:pos_flutter/main.dart';
 import 'package:pos_flutter/models/cart.dart';
-import 'package:pos_flutter/models/category.dart';
-import 'package:pos_flutter/models/model.dart';
 import 'package:http/http.dart' as http;
-import 'package:pos_flutter/models/product.dart';
 import 'package:pos_flutter/pages/categoryEditForm.dart';
 import 'dart:convert';
 import 'package:pos_flutter/pages/categoryForm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-Future<List<Cart>> getProductAll(BuildContext context) async {
-  try {
-    // Categorys.checkRefreshToken(context);
-    // var access = await FlutterSession().get("accessToken");
-    // var endpoint = Uri.parse("${Categorys.serverIp}/api/v1/product/");
-    // var response = await http.get(endpoint, headers: {
-    //   'Content-Type': 'application/json',
-    //   'Accept': 'application/json',
-    //   'Authorization': '$access',
-    // });
-    // if (response.statusCode == 200) {
-    //   List jsonResponse = json.decode(response.body);
-    //   // print(jsonResponse);
-    //   return jsonResponse.map((data) => new Cart.fromJson(data)).toList();
-    // } else {
-    //   return Future.error("Server Error");
-    // }
-    // var jsonResponse=jsonDecode(list);
-    return Cart.listCart;
-  } catch (SocketException) {
-    return Future.error("Error get data");
-  }
-}
 
 class CartList extends StatefulWidget {
   // MyApp({Key key}) : super(key: key);
@@ -96,7 +68,8 @@ class _CartListState extends State<CartList> {
                     itemCount: list.length,
                     itemBuilder: (BuildContext context, index) {
                       return Card(
-
+                          child: Padding(
+                        padding: EdgeInsets.all(10),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -124,9 +97,8 @@ class _CartListState extends State<CartList> {
                                 },
                                 icon: Icon(Icons.remove_circle),
                               ),
-                                Text("${list[index].qty}",
-                                    style: TextStyle(fontSize: 16)),
-
+                              Text("${list[index].qauntity}",
+                                  style: TextStyle(fontSize: 16)),
                               IconButton(
                                 onPressed: () {
                                   Cart.addQty(list[index].id);
@@ -139,41 +111,67 @@ class _CartListState extends State<CartList> {
                               ),
                               Text("${list[index].amount().toString()}")
                             ]),
-                      );
+                      ));
                     })),
-            SizedBox(height:10,),
-            Container(color:Colors.teal,child:Column(children: [Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                new Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8.0),
-                    child: Text(
-                      "Total :",
-                      style: TextStyle(fontSize: 18),
-                    )),
-                Text(
-                  "${Cart.totalAmount()}",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                      child: RaisedButton(
-                        onPressed: () {
-                        Cart.romvoveItemAll();
-                        },
-                        child: Text(
-                          "Check Out",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                        color: Colors.green,
-                      ))
-                ],
-              )],),)
+            checkOut()
           ],
         ));
+  }
+  Widget checkOut(){
+    return Container(
+        child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      new Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 8.0),
+                          child: Text(
+                            "Total :",
+                            style: TextStyle(fontSize: 18),
+                          )),
+                      Text(
+                        "${Cart.totalAmount()}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                          child: RaisedButton(
+                            onPressed: () async {
+                              var listItem=[];
+                              SaleDetail saleDetail;
+                              for(var item in Cart.listCart){
+                                product products=new product(item.id);
+                                saleDetail= new SaleDetail(item.qauntity,item.unitPrice,item.amount(),products);
+                                listItem.add(saleDetail);
+                              }
+                              var userId=await FlutterSession().get("id");
+                              Sale sale=new Sale(Cart.totalAmount(),userId,List.from(listItem));
+                              var body = jsonEncode(sale);
+                              print(body);
+                              Cart.Post(context, "/api/v1/sale/", body);
+                             setState(() {
+                               Cart.listCart.clear();
+                             });
+                            },
+                            child: Text(
+                              "Check Out",
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                            color: Colors.green,
+                          )),
+                    ],
+                  )
+                ],
+              ),
+            )));
   }
 }

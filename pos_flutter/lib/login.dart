@@ -36,98 +36,150 @@ class _LoginState extends State<Login> {
     return SingleChildScrollView(
         child: Center(
       child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(10.0),
+        color: Color.fromRGBO(250, 250, 250, 1),
+        padding: EdgeInsets.all(20.0),
         child: Form(
             key: _formKey,
-            child: Column(children: [
-              SizedBox(
-                height: 100.0,
-              ),
-              CircleAvatar(
-                child: Text(""),
-                radius: 70.0,
-                backgroundImage: NetworkImage(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdS84e1z_z21366wQqF66PYfzNzVbh5GZVaQ&usqp=CAU"),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              TextFormField(
-                  style: TextStyle(fontSize: 20),
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'User Name',
-                      hintText: "Username"),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter username';
-                    }
-                    return null;
-                  }),
-              SizedBox(
-                height: 10.0,
-              ),
-              TextFormField(
-                  style: TextStyle(fontSize: 20),
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      hintText: "Password"),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    return null;
-                  }),
-              SizedBox(
-                height: 10.0,
-              ),
-              FlatButton(
-                child: Text(
-                  "Log In",
-                  style: TextStyle(fontSize: 20),
-                ),
-                textColor: Colors.black,
-                //color: Colors.blue,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a Snackbar.
-                    User objUser = User(
-                        username: usernameController.text,
-                        password: passwordController.text);
-                    final body = json.encode(objUser.toJson());
-                    var t = await logIn(context, body);
-                    setState(() {});
-                  }
-                },
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "forget password",
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(
-                height: 50.0,
-              ),
-              Container(
-                color:Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      "assets/setec.png",
-                      width: 300,
-                    )
-                  ],
-                ),
-              )
-            ])),
+            child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                  ),
+                  CircleAvatar(
+                    child: Text(""),
+                    radius: 70.0,
+                    backgroundImage: NetworkImage(
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdS84e1z_z21366wQqF66PYfzNzVbh5GZVaQ&usqp=CAU"),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width/1.2,
+                    height: 50,
+                    margin: EdgeInsets.only(top: 32),
+                    padding: EdgeInsets.only(
+                        top: 4,left: 16, right: 16, bottom: 4
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(50)
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 5
+                          )
+                        ]
+                    ),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter username';
+                        }
+                        return null;
+                      },
+                      controller: usernameController,
+                      obscureText:false,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(Icons.person,
+                          color: Color(0xff6bceff),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width/1.2,
+                    height: 50,
+                    margin: EdgeInsets.only(top: 32),
+                    padding: EdgeInsets.only(
+                        top: 4,left: 16, right: 16, bottom: 4
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(50)
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 5
+                          )
+                        ]
+                    ),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter username';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(Icons.vpn_key,
+                          color: Color(0xff6bceff),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Forget Password",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Container(
+                              child: RaisedButton(
+                        color: Color.fromRGBO(29, 180, 255, 1),
+                        child: Text(
+                          "Log In",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        textColor: Colors.white,
+                        //color: Colors.blue,
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            // If the form is valid, display a Snackbar.
+                            User user = User();
+                                user.username=usernameController.text;
+                                user.password=passwordController.text;
+                            final body = json.encode(user.toJson());
+                            var t = await user.logIn(context, body);
+
+                          }
+                        },
+                      ))),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          "assets/setec.png",
+                          width: 300,
+                        )
+                      ],
+                    ),
+                  )
+                ])),
       ),
     ));
   }

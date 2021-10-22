@@ -7,10 +7,10 @@ import 'package:pos_flutter/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 class Categorys {
-  final int id;
-  final String name;
+  late int id;
+  late String name;
   // static final serverIp = "http://10.0.0.2:8080";
-  static final serverIp = "http://192.168.1.37:8080";
+  static final serverIp = "http://192.168.43.59:8080";
   static final header="";
   static Future checkRefreshToken(BuildContext context) async{
     // Timer(Duration(milliseconds:1), () async {
@@ -125,8 +125,8 @@ class Categorys {
       throw Exception('Unexpected error occured!');
     }
   }
-
-  Categorys({this.id=0,this.name=""});
+  Categorys();
+  Categorys.newInstance({required this.id,required this.name});
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
@@ -167,7 +167,7 @@ class Categorys {
   }
 
   factory Categorys.fromJson(Map<String, dynamic> json) {
-    return Categorys(
+    return Categorys.newInstance(
       id: json['id'],
       name: json['name'],
     );

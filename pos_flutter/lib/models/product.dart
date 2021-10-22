@@ -6,7 +6,7 @@ class Product {
   late int unitInStock;
   late String photo;
   late int userId;
-  late int qty = 0;
+  late int qauntity = 0;
   Product();
   Product.newInstance({
     required this.id,
